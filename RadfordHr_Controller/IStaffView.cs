@@ -17,18 +17,18 @@ namespace RadfordHr_Controller
         int? GetIdOfSelectedStaffInGrid();
         void SetSelectedStaffInGrid(Staff user);
 
-        Staff Staff { get; set; }
-         //int? Id { get; set; }
-         //StaffType StaffType { get; set; }
-         //string Title { get; set; } 
-         //string FirstName { get; set; } 
-         //string LastName { get; set; } 
-         //string MiddleInitial { get; set; } 
-         //string HomePhone { get; set; } 
-         //string CellPhone { get; set; } 
-         //string OfficeExtension { get; set; } 
-         //string IRDNumber { get; set; } 
-         //string Status { get; set; } 
-         //int? ManagerId { get; set; }
+        //Staff Staff { get; set; }
+        int? Id { get; set; }
+        StaffType StaffType { get; set; }
+        StaffTitle Title { get; set; }
+        string FirstName { get; set; }
+        string LastName { get; set; }
+        string MiddleInitial { get; set; }
+        string HomePhone { get; set; }
+        string CellPhone { get; set; }
+        string OfficeExtension { get; set; }
+        string IRDNumber { get; set; }
+        StaffStatus Status { get; set; }
+        int? ManagerId { get; set; }
     }
 }

@@ -20,49 +20,49 @@ namespace RadfordHr_Controller
             _staff = staff;
             view.SetController(this);
         }
-        public IList StaffList
+        public List<Staff> StaffList
         {
-            get { return ArrayList.ReadOnly(_staff); }
+            get { return _staff??new(); }
         }
 
         private void updateViewDetailValues(Staff staff)
         {
-            _view.Staff = staff;
-            //_view.Id = staff.Id;
-            //_view.StaffType = staff.StaffType;
-            //_view.Title = staff.Title;
-            //_view.FirstName = staff.FirstName;
-            //_view.LastName = staff.LastName;
-            //_view.MiddleInitial = staff.MiddleInitial;
-            //_view.HomePhone = staff.HomePhone;
-            //_view.CellPhone = staff.CellPhone;
-            //_view.OfficeExtension = staff.OfficeExtension;
-            //_view.IRDNumber = staff.IRDNumber;
-            //_view.Status = staff.Status;
-            //_view.ManagerId = staff.ManagerId;            
+            //_view.Staff = staff;
+            _view.Id = staff.Id;
+            _view.StaffType = staff.StaffType;
+            _view.Title = staff.Title;
+            _view.FirstName = staff.FirstName;
+            _view.LastName = staff.LastName;
+            _view.MiddleInitial = staff.MiddleInitial;
+            _view.HomePhone = staff.HomePhone;
+            _view.CellPhone = staff.CellPhone;
+            _view.OfficeExtension = staff.OfficeExtension;
+            _view.IRDNumber = staff.IRDNumber;
+            _view.Status = staff.Status;
+            _view.ManagerId = staff.ManagerId;
         }
         private void updateStaffWithViewValues(Staff staff)
         {
-            staff = _view.Staff;
-            //staff.Id = _view.Id;
-            //staff.StaffType = _view.StaffType;
-            //staff.Title = _view.Title;
-            //staff.FirstName = _view.FirstName;
-            //staff.LastName = _view.LastName;
-            //staff.MiddleInitial = _view.MiddleInitial;
-            //staff.HomePhone = _view.HomePhone;
-            //staff.CellPhone = _view.CellPhone;
-            //staff.OfficeExtension = _view.OfficeExtension;
-            //staff.IRDNumber = _view.IRDNumber;
-            //staff.Status = _view.Status;
-            //staff.ManagerId = _view.ManagerId;
+            //staff = _view.Staff;
+            staff.Id = _view.Id;
+            staff.StaffType = _view.StaffType;
+            staff.Title = _view.Title;
+            staff.FirstName = _view.FirstName;
+            staff.LastName = _view.LastName;
+            staff.MiddleInitial = _view.MiddleInitial;
+            staff.HomePhone = _view.HomePhone;
+            staff.CellPhone = _view.CellPhone;
+            staff.OfficeExtension = _view.OfficeExtension;
+            staff.IRDNumber = _view.IRDNumber;
+            staff.Status = _view.Status;
+            staff.ManagerId = _view.ManagerId;
         }
         public void LoadView()
         {
             _view.ClearGrid();
             foreach (Staff usr in _staff)
                 _view.AddStaffToGrid(usr);
-            if (_staff != null)
+            if (_staff != null && _staff.Count>0)
                 _view.SetSelectedStaffInGrid(_staff.First());
 
         }
@@ -82,7 +82,7 @@ namespace RadfordHr_Controller
         }
         public void AddNewStaff()
         {
-            _selectedStaff = new Staff(null,StaffType.Employee,string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty,null);
+            _selectedStaff = new Staff(null,StaffType.Employee, StaffTitle.Mr, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, StaffStatus.Active, null);
 
             this.updateViewDetailValues(_selectedStaff);
             //this._view.CanModifyID = true;

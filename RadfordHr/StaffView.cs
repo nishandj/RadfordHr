@@ -20,32 +20,162 @@ namespace RadfordHr
         }
 
         StaffController _controller;
-        Staff Staff = new();
-        RadfordHr_Model.Staff IStaffView.Staff
+        int? selectedId = null;
+
+        public int? Id
         {
             get
             {
-                return new RadfordHr_Model.Staff();
+                return selectedId;
+            }
+            set { selectedId = value; }
+        }
 
+        public StaffType StaffType
+        {
+            get
+            {
+                return rbEmployee.Checked ? StaffType.Employee : StaffType.Manager;
             }
             set
             {
-                Staff = value;
+                if (value == StaffType.Manager)
+                    rbManager.Checked = true;
+                else rbEmployee.Checked = false;
             }
         }
-
-        //public int? Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public StaffType StaffType { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string Title { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string FirstName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string LastName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string MiddleInitial { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string HomePhone { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string CellPhone { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string OfficeExtension { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string IRDNumber { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public string Status { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //public int? ManagerId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public StaffTitle Title
+        {
+            get
+            {
+                if (rbMr.Checked)
+                {
+                    return StaffTitle.Mr;
+                }
+                else if (rbMrs.Checked)
+                {
+                    return StaffTitle.Mrs;
+                }
+                else if (rbMiss.Checked)
+                {
+                    return StaffTitle.Miss;
+                }
+                else if (rbSir.Checked)
+                {
+                    return StaffTitle.Sir;
+                }
+                else
+                {
+                    return StaffTitle.Mr;
+                }
+            }
+            set
+            {
+                if (value == StaffTitle.Mr)
+                    rbMr.Checked = true;
+                else if (value == StaffTitle.Mrs)
+                    rbMrs.Checked = true;
+                else if (value == StaffTitle.Miss)
+                    rbMiss.Checked = true;
+                else if (value == StaffTitle.Sir)
+                    rbSir.Checked = true;
+            }
+        }
+        public string FirstName
+        {
+            get
+            {
+                return txtFirstName.Text;
+            }
+            set { txtFirstName.Text = value; }
+        }
+        public string LastName
+        {
+            get
+            {
+                return txtLastName.Text;
+            }
+            set { txtLastName.Text = value; }
+        }
+        public string MiddleInitial
+        {
+            get
+            {
+                return txtMiddleInitial.Text;
+            }
+            set { txtMiddleInitial.Text = value; }
+        }
+        public string HomePhone
+        {
+            get
+            {
+                return txtHomePhone.Text;
+            }
+            set { txtHomePhone.Text = value; }
+        }
+        public string CellPhone
+        {
+            get
+            {
+                return txtCellPhone.Text;
+            }
+            set { txtCellPhone.Text = value; }
+        }
+        public string OfficeExtension
+        {
+            get
+            {
+                return txtOfficeExtension.Text;
+            }
+            set { txtOfficeExtension.Text = value; }
+        }
+        public string IRDNumber
+        {
+            get
+            {
+                return txtIRDNumber.Text;
+            }
+            set { txtIRDNumber.Text = value; }
+        }
+        public StaffStatus Status
+        {
+            get
+            {
+                if (rbActive.Checked)
+                {
+                    return StaffStatus.Active;
+                }
+                else if (rbInactive.Checked)
+                {
+                    return StaffStatus.Inactive;
+                }
+                else if (rbPending.Checked)
+                {
+                    return StaffStatus.Pending;
+                }
+                else
+                {
+                    return StaffStatus.Active;
+                }
+            }
+            set
+            {
+                if (value == StaffStatus.Active)
+                    rbActive.Checked = true;
+                else if (value == StaffStatus.Inactive)
+                    rbInactive.Checked = true;
+                else if (value == StaffStatus.Pending)
+                    rbPending.Checked = true;
+            }
+        }
+        public int? ManagerId
+        {
+            get
+            {
+                return cbManager.SelectedIndex;
+            }
+            set { /*cbManager.SelectedIndex = value??0;*/  }
+        }
 
         public void AddStaffToGrid(RadfordHr_Model.Staff user)
         {
@@ -54,7 +184,22 @@ namespace RadfordHr
 
         public void ClearGrid()
         {
-            throw new NotImplementedException();
+            dgvStaff.Columns.Clear();
+            dgvStaff.AutoGenerateColumns = false;
+            dgvStaff.Columns.Add("IdColumn", "ID");
+            dgvStaff.Columns.Add("StaffTypeColumn", "Type");
+            dgvStaff.Columns.Add("TitleColumn", "Title");
+            dgvStaff.Columns.Add("FirstNameColumn", "First Name");
+            dgvStaff.Columns.Add("LastNameColumn", "Last Name");
+            dgvStaff.Columns.Add("MiddleInitialColumn", "Middle Initial");
+            dgvStaff.Columns.Add("HomePhoneColumn", "Home Phone");
+            dgvStaff.Columns.Add("CellPhoneColumn", "Cell Phone");
+            dgvStaff.Columns.Add("OfficeExtensionColumn", "Office Extension");
+            dgvStaff.Columns.Add("IRDNumberColumn", "IRD Number");
+            dgvStaff.Columns.Add("StatusColumn", "Status");
+            dgvStaff.Columns.Add("ManagerIdColumn", "Manager");
+            //_controller.AddNewStaff();
+            dgvStaff.DataSource = _controller.StaffList;
         }
 
         public int? GetIdOfSelectedStaffInGrid()
@@ -69,17 +214,59 @@ namespace RadfordHr
 
         public void SetController(StaffController controller)
         {
-            throw new NotImplementedException();
+            _controller = controller;
         }
 
         public void SetSelectedStaffInGrid(RadfordHr_Model.Staff user)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateGridWithChangedStaff(RadfordHr_Model.Staff user)
         {
             throw new NotImplementedException();
+        }
+
+        private void StaffView_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Title", "Title");
+                //dgvStaff.Columns.Add("First Name", "First Name");
+                //dgvStaff.Columns.Add("Last Name", "Last Name");
+                //dgvStaff.Columns.Add("Middle Initial", "Middle Initial");
+                //dgvStaff.Columns.Add("Home Phone", "Home Phone");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.Columns.Add("Type", "Type");
+                //dgvStaff.DataSource = _controller.StaffList;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnAddNewRecord_Click(object sender, EventArgs e)
+        {
+            _controller.AddNewStaff();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            _controller.Save();
+            dgvStaff.DataSource = _controller.StaffList;
         }
     }
 }

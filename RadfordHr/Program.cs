@@ -1,3 +1,6 @@
+using Microsoft.VisualBasic.ApplicationServices;
+using RadfordHr_Controller;
+
 namespace RadfordHr
 {
     internal static class Program
@@ -11,7 +14,10 @@ namespace RadfordHr
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            StaffView view = new StaffView();
+            StaffController controller = new StaffController(view, new());
+            //controller.LoadView();
+            Application.Run(view);
         }
     }
 }

@@ -11,8 +11,8 @@ namespace RadfordHr_Model
         public Staff()
         {
         }
-        public Staff(int? Id, StaffType StaffType, string Title, string FirstName, string LastName, string MiddleInitial, string HomePhone, string CellPhone,
-            string OfficeExtension, string IRDNumber, string Status, int? ManagerId)
+        public Staff(int? Id, StaffType StaffType, StaffTitle Title, string FirstName, string LastName, string MiddleInitial, string HomePhone, string CellPhone,
+            string OfficeExtension, string IRDNumber, StaffStatus Status, int? ManagerId)
         {
             this.Id = Id;
             this.StaffType = StaffType;
@@ -29,7 +29,7 @@ namespace RadfordHr_Model
         }
         public int? Id { get; set; }
         public StaffType StaffType { get; set; }
-        public string Title { get; set; } = string.Empty;
+        public StaffTitle Title { get; set; } 
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string MiddleInitial { get; set; } = string.Empty;
@@ -37,7 +37,7 @@ namespace RadfordHr_Model
         public string CellPhone { get; set; } = string.Empty;
         public string OfficeExtension { get; set; } = string.Empty;
         public string IRDNumber { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
+        public StaffStatus Status { get; set; } 
         public int? ManagerId { get; set; }
     }
     public enum StaffType
@@ -51,4 +51,11 @@ namespace RadfordHr_Model
         Inactive, 
         Pending
     }
+    public enum StaffTitle
+    {
+        Mr, 
+        Mrs, 
+        Miss, 
+        Sir
+    }    
 }
