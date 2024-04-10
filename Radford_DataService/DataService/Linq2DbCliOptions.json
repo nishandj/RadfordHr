@@ -1,0 +1,22 @@
+{
+  "general": {
+    "provider": "SqlServer",
+    "connection": "Data Source=NISHAN-DIJITALT\\SQLEXPRESS2008;Initial Catalog=RadfordHr;Persist Security Info=False;User ID=sa;Password=Sa@123;Trust Server Certificate=True;",
+    "output": ".\\DataService\\",
+    "overwrite": true
+  },
+  "code": {
+    "single-file": true,
+    "namespace": "RadfordHr.Data.Models",
+    "nrt": false
+  },
+  "dataModel": {
+    "context-name": "RadfordHrDbContext",
+    "partial-entities": true
+  },
+  "schema": {
+    "objects": [ "table", "view", "stored-procedure" ],
+    "safe-schema-only": true,
+    "load-sproc-schema":  true
+  } 
+}

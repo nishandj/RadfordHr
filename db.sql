@@ -1,0 +1,69 @@
+
+--CREATE TABLE Staff (
+--    Id INT CONSTRAINT PK_Staff_Id PRIMARY KEY IDENTITY,
+--    StaffType VARCHAR(8) NOT NULL,
+--    Title VARCHAR(4) NOT NULL,
+--    FirstName VARCHAR(100) NOT NULL,
+--    LastName VARCHAR(150) NOT NULL,
+--    MiddleInitial VARCHAR(5),
+--    HomePhone VARCHAR(15),
+--    CellPhone VARCHAR(15),
+--    OfficeExtension VARCHAR(10),
+--    IRDNumber VARCHAR(20),
+--    [Status] VARCHAR(8) NOT NULL,
+--    ManagerId INT,
+--    CONSTRAINT CK_Staff_StaffType CHECK (StaffType IN ('Employee', 'Manager')),
+--    CONSTRAINT CK_Staff_Title CHECK (Title IN ('Mr', 'Mrs', 'Miss', 'Sir')),
+--    CONSTRAINT CK_Staff_Status CHECK ([Status] IN ('Active', 'Inactive', 'Pending')),
+--    CONSTRAINT FK_Staff_Manager FOREIGN KEY (ManagerId) REFERENCES Staff(Id)
+--);
+
+
+-- Stored procedure for inserting or updating a record in the Staff table
+--CREATE PROCEDURE UpsertStaff
+--    @Id INT = NULL,
+--    @StaffType VARCHAR(8),
+--    @Title VARCHAR(4),
+--    @FirstName VARCHAR(100),
+--    @LastName VARCHAR(150),
+--    @MiddleInitial VARCHAR(5) = NULL,
+--    @HomePhone VARCHAR(15) = NULL,
+--    @CellPhone VARCHAR(15) = NULL,
+--    @OfficeExtension VARCHAR(10) = NULL,
+--    @IRDNumber VARCHAR(20) = NULL,
+--    @Status VARCHAR(8),
+--    @ManagerId INT = NULL
+--AS
+--BEGIN
+--    IF @Id IS NULL
+--    BEGIN
+--        -- Insert new record
+--        INSERT INTO Staff (StaffType, Title, FirstName, LastName, MiddleInitial, HomePhone, CellPhone, OfficeExtension, IRDNumber, [Status], ManagerId)
+--        VALUES (@StaffType, @Title, @FirstName, @LastName, @MiddleInitial, @HomePhone, @CellPhone, @OfficeExtension, @IRDNumber, @Status, @ManagerId);
+--    END
+--    ELSE
+--    BEGIN
+--        -- Update existing record
+--        UPDATE Staff
+--        SET StaffType = @StaffType,
+--            Title = @Title,
+--            FirstName = @FirstName,
+--            LastName = @LastName,
+--            MiddleInitial = @MiddleInitial,
+--            HomePhone = @HomePhone,
+--            CellPhone = @CellPhone,
+--            OfficeExtension = @OfficeExtension,
+--            IRDNumber = @IRDNumber,
+--            [Status] = @Status,
+--            ManagerId = @ManagerId
+--        WHERE Id = @Id;
+--    END
+--END
+
+
+--CREATE PROCEDURE GetStaff
+--AS
+--BEGIN
+--    SELECT Id, StaffType, Title, FirstName, LastName, MiddleInitial, HomePhone, CellPhone, OfficeExtension, IRDNumber, [Status], ManagerId
+--    FROM Staff;
+--END
