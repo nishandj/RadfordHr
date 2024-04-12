@@ -47,8 +47,8 @@
             rbSir = new RadioButton();
             rbMiss = new RadioButton();
             panel1 = new Panel();
-            rbEmployee = new RadioButton();
             rbManager = new RadioButton();
+            rbEmployee = new RadioButton();
             label20 = new Label();
             label19 = new Label();
             lblManager = new Label();
@@ -61,10 +61,13 @@
             label3 = new Label();
             label1 = new Label();
             groupBox2 = new GroupBox();
+            btnCancel = new Button();
             btnSave = new Button();
             btnAddNewRecord = new Button();
             groupBox3 = new GroupBox();
             dgvStaff = new DataGridView();
+            cmbFilter = new ComboBox();
+            label2 = new Label();
             groupBox1.SuspendLayout();
             panel3.SuspendLayout();
             panel2.SuspendLayout();
@@ -107,11 +110,13 @@
             // 
             // cbManager
             // 
+            cbManager.DropDownStyle = ComboBoxStyle.DropDownList;
             cbManager.FormattingEnabled = true;
             cbManager.Location = new Point(541, 152);
             cbManager.Name = "cbManager";
             cbManager.Size = new Size(317, 23);
             cbManager.TabIndex = 36;
+            cbManager.SelectedIndexChanged += cbManager_SelectedIndexChanged;
             // 
             // panel3
             // 
@@ -262,34 +267,36 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(rbEmployee);
             panel1.Controls.Add(rbManager);
+            panel1.Controls.Add(rbEmployee);
             panel1.Location = new Point(104, 31);
             panel1.Name = "panel1";
             panel1.Size = new Size(167, 28);
             panel1.TabIndex = 26;
             // 
-            // rbEmployee
-            // 
-            rbEmployee.AutoSize = true;
-            rbEmployee.Location = new Point(4, 5);
-            rbEmployee.Name = "rbEmployee";
-            rbEmployee.Size = new Size(77, 19);
-            rbEmployee.TabIndex = 20;
-            rbEmployee.TabStop = true;
-            rbEmployee.Text = "Employee";
-            rbEmployee.UseVisualStyleBackColor = true;
-            // 
             // rbManager
             // 
             rbManager.AutoSize = true;
-            rbManager.Location = new Point(87, 5);
+            rbManager.Location = new Point(87, 4);
             rbManager.Name = "rbManager";
             rbManager.Size = new Size(72, 19);
-            rbManager.TabIndex = 21;
+            rbManager.TabIndex = 23;
             rbManager.TabStop = true;
             rbManager.Text = "Manager";
             rbManager.UseVisualStyleBackColor = true;
+            rbManager.CheckedChanged += rbManager_CheckedChanged;
+            // 
+            // rbEmployee
+            // 
+            rbEmployee.AutoSize = true;
+            rbEmployee.Location = new Point(4, 4);
+            rbEmployee.Name = "rbEmployee";
+            rbEmployee.Size = new Size(77, 19);
+            rbEmployee.TabIndex = 22;
+            rbEmployee.TabStop = true;
+            rbEmployee.Text = "Employee";
+            rbEmployee.UseVisualStyleBackColor = true;
+            rbEmployee.CheckedChanged += rbEmployee_CheckedChanged;
             // 
             // label20
             // 
@@ -392,6 +399,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnCancel);
             groupBox2.Controls.Add(btnSave);
             groupBox2.Controls.Add(btnAddNewRecord);
             groupBox2.Location = new Point(900, 12);
@@ -401,11 +409,21 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Manage";
             // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(6, 169);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(140, 51);
+            btnCancel.TabIndex = 2;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
             // btnSave
             // 
-            btnSave.Location = new Point(6, 136);
+            btnSave.Location = new Point(6, 97);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(140, 91);
+            btnSave.Size = new Size(140, 51);
             btnSave.TabIndex = 1;
             btnSave.Text = "Save Staff Details";
             btnSave.UseVisualStyleBackColor = true;
@@ -415,7 +433,7 @@
             // 
             btnAddNewRecord.Location = new Point(6, 29);
             btnAddNewRecord.Name = "btnAddNewRecord";
-            btnAddNewRecord.Size = new Size(140, 91);
+            btnAddNewRecord.Size = new Size(140, 59);
             btnAddNewRecord.TabIndex = 0;
             btnAddNewRecord.Text = "Add New Record";
             btnAddNewRecord.UseVisualStyleBackColor = true;
@@ -424,6 +442,8 @@
             // groupBox3
             // 
             groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox3.Controls.Add(label2);
+            groupBox3.Controls.Add(cmbFilter);
             groupBox3.Controls.Add(dgvStaff);
             groupBox3.Location = new Point(12, 251);
             groupBox3.Name = "groupBox3";
@@ -438,11 +458,32 @@
             dgvStaff.AllowUserToDeleteRows = false;
             dgvStaff.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvStaff.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvStaff.Location = new Point(6, 22);
+            dgvStaff.Location = new Point(6, 84);
             dgvStaff.Name = "dgvStaff";
             dgvStaff.ReadOnly = true;
-            dgvStaff.Size = new Size(1028, 427);
+            dgvStaff.Size = new Size(1028, 365);
             dgvStaff.TabIndex = 0;
+            dgvStaff.CellClick += dgvStaff_CellClick;
+            // 
+            // cmbFilter
+            // 
+            cmbFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFilter.FormattingEnabled = true;
+            cmbFilter.Items.AddRange(new object[] { "All", "Active", "Inactive", "Pending" });
+            cmbFilter.Location = new Point(108, 22);
+            cmbFilter.Name = "cmbFilter";
+            cmbFilter.Size = new Size(127, 23);
+            cmbFilter.TabIndex = 37;
+            cmbFilter.SelectedIndexChanged += cmbFilter_SelectedIndexChanged;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(6, 25);
+            label2.Name = "label2";
+            label2.Size = new Size(90, 15);
+            label2.TabIndex = 38;
+            label2.Text = "Show Records : ";
             // 
             // StaffView
             // 
@@ -466,6 +507,7 @@
             panel1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvStaff).EndInit();
             ResumeLayout(false);
         }
@@ -486,8 +528,6 @@
         private Label label20;
         private Label label19;
         private Label lblManager;
-        private RadioButton rbManager;
-        private RadioButton rbEmployee;
         private RadioButton rbSir;
         private RadioButton rbMiss;
         private RadioButton rbMrs;
@@ -508,6 +548,11 @@
         private ComboBox cbManager;
         private Button btnSave;
         private Button btnAddNewRecord;
+        private RadioButton rbEmployee;
+        private RadioButton rbManager;
+        private Button btnCancel;
         private DataGridView dgvStaff;
+        private ComboBox cmbFilter;
+        private Label label2;
     }
 }

@@ -6,9 +6,11 @@
 // ---------------------------------------------------------------------------------------------------
 
 using LinqToDB;
+using LinqToDB.Common;
 using LinqToDB.Data;
 using LinqToDB.Mapping;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -102,11 +104,14 @@ namespace RadfordHr.Data.Models
 		#endregion
 
 		#region UpsertStaff
-		public static int UpsertStaff(this RadfordHrDbContext dataConnection, int? id, string staffType, string title, string firstName, string lastName, string middleInitial, string homePhone, string cellPhone, string officeExtension, string irdNumber, string status, int? managerId)
+		public static int UpsertStaff(this RadfordHrDbContext dataConnection, ref int? id, string staffType, string title, string firstName, string lastName, string middleInitial, string homePhone, string cellPhone, string officeExtension, string irdNumber, string status, int? managerId)
 		{
 			var parameters = new []
 			{
-				new DataParameter("@Id", id, DataType.Int32),
+				new DataParameter("@Id", id, DataType.Int32)
+				{
+					Direction = ParameterDirection.InputOutput
+				},
 				new DataParameter("@StaffType", staffType, DataType.VarChar)
 				{
 					Size = 8
@@ -149,14 +154,19 @@ namespace RadfordHr.Data.Models
 				},
 				new DataParameter("@ManagerId", managerId, DataType.Int32)
 			};
-			return dataConnection.ExecuteProc("[UpsertStaff]", parameters);
+			var ret = dataConnection.ExecuteProc("[UpsertStaff]", parameters);
+			id = Converter.ChangeTypeTo<int?>(parameters[0].Value);
+			return ret;
 		}
 
-		public static Task<int> UpsertStaffAsync(this RadfordHrDbContext dataConnection, int? id, string staffType, string title, string firstName, string lastName, string middleInitial, string homePhone, string cellPhone, string officeExtension, string irdNumber, string status, int? managerId, CancellationToken cancellationToken = default)
+		public static async Task<UpsertStaffResults> UpsertStaffAsync(this RadfordHrDbContext dataConnection, int? id, string staffType, string title, string firstName, string lastName, string middleInitial, string homePhone, string cellPhone, string officeExtension, string irdNumber, string status, int? managerId, CancellationToken cancellationToken = default)
 		{
 			var parameters = new []
 			{
-				new DataParameter("@Id", id, DataType.Int32),
+				new DataParameter("@Id", id, DataType.Int32)
+				{
+					Direction = ParameterDirection.InputOutput
+				},
 				new DataParameter("@StaffType", staffType, DataType.VarChar)
 				{
 					Size = 8
@@ -199,7 +209,18 @@ namespace RadfordHr.Data.Models
 				},
 				new DataParameter("@ManagerId", managerId, DataType.Int32)
 			};
-			return dataConnection.ExecuteProcAsync("[UpsertStaff]", cancellationToken, parameters);
+			var result = await dataConnection.ExecuteProcAsync("[UpsertStaff]", cancellationToken, parameters);
+			return new UpsertStaffResults()
+			{
+				Result = result,
+				Id = Converter.ChangeTypeTo<int?>(parameters[0].Value)
+			};
+		}
+
+		public class UpsertStaffResults
+		{
+			public int  Result { get; set; }
+			public int? Id     { get; set; }
 		}
 		#endregion
 		#endregion

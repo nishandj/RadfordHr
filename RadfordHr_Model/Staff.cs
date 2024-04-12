@@ -39,6 +39,7 @@ namespace RadfordHr_Model
         public string IRDNumber { get; set; } = string.Empty;
         public StaffStatus Status { get; set; } 
         public int? ManagerId { get; set; }
+        public string FullName { get { return this.FirstName + " " + this.LastName; } } 
     }
     public enum StaffType
     {
