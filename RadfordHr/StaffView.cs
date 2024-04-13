@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
+﻿using ClosedXML.Excel;
+using Microsoft.VisualBasic.ApplicationServices;
 using RadfordHr_Controller;
 using RadfordHr_Model;
 using System;
@@ -6,20 +7,25 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WkHtmlToPdfDotNet;
 
 namespace RadfordHr
 {
     public partial class StaffView : Form, IStaffView
     {
+        private PDFHelper pdfHelper;
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public StaffView()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
+            pdfHelper = new PDFHelper(new SynchronizedConverter(new PdfTools()));
         }
 
         StaffController _controller;
@@ -269,7 +275,7 @@ namespace RadfordHr
             foreach (DataGridViewRow row in dgvStaff.Rows)
             {
                 // 0 is the column index
-                if (row.Cells[0].Value.ToString()==staff.Id.ToString())
+                if (row.Cells[0].Value.ToString() == staff.Id.ToString())
                 {
                     row.Cells[1].Value = staff.StaffType.ToString();
                     row.Cells[2].Value = staff.Title.ToString();
@@ -325,6 +331,7 @@ namespace RadfordHr
         {
             //_controller.AddNewStaff();
             _controller.SelectedStaff = null;
+            Id = null;
             btnAddNewRecord.Enabled = true;
             btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
         }
@@ -365,7 +372,7 @@ namespace RadfordHr
 
         private void cbManager_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_controller.SelectedStaff != null && cbManager.SelectedItem != null)                
+            if (_controller.SelectedStaff != null && cbManager.SelectedItem != null)
                 this.ManagerId = ((Staff)cbManager.SelectedItem).Id;
         }
 
@@ -381,6 +388,66 @@ namespace RadfordHr
             {
                 AddStaffToGrid(staff);
             }
+        }
+
+        private void btnExportExcel_Click(object sender, EventArgs e)
+        {
+            string fileName;
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "xls files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+            saveFileDialog1.Title = "To Excel";
+            saveFileDialog1.FileName = "RadfordHr - StaffList";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                List<StaffToPrint> staffToPrintList = new();
+                foreach (var item in _controller.StaffList)
+                {
+                    staffToPrintList.Add(new StaffToPrint
+                    {
+                        Id = item.Id,
+                        StaffType = item.StaffType.ToString(),
+                        Title = item.Title.ToString(),
+                        FirstName = item.FirstName,
+                        LastName = item.LastName,
+                        MiddleInitial = item.MiddleInitial,
+                        HomePhone = item.HomePhone,
+                        CellPhone = item.CellPhone,
+                        OfficeExtension = item.OfficeExtension,
+                        IRDNumber = item.IRDNumber,
+                        Status = item.Status.ToString(),
+                        Manager = _controller.ManagerList.Where(x => x.Id == item.ManagerId).FirstOrDefault()?.FullName
+                    });
+                }
+                staffToPrintList = staffToPrintList.OrderBy(x => x.StaffType).ThenBy(x => x.FirstName).ToList();
+                fileName = saveFileDialog1.FileName;
+                XLWorkbook xLWorkbook = ExcelService.GenerateExcel<StaffToPrint>(staffToPrintList, "RadfordHr - StaffList");
+                xLWorkbook.SaveAs(fileName);
+            }
+        }
+        private class StaffToPrint
+        {
+            public int? Id { get; set; }
+            public string? StaffType { get; set; }
+            public string? Title { get; set; }
+            public string? FirstName { get; set; }
+            public string? LastName { get; set; }
+            public string? MiddleInitial { get; set; }
+            public string? HomePhone { get; set; }
+            public string? CellPhone { get; set; }
+            public string? OfficeExtension { get; set; }
+            public string? IRDNumber { get; set; }
+            public string? Status { get; set; }
+            public string? Manager { get; set; }
+        }
+
+        private void btnExportToPdf_Click(object sender, EventArgs e)
+        {
+            string htmlContent = "<html><body><h1>Hello, PDF!</h1></body></html>";
+
+            // Convert HTML to PDF
+            byte[] pdf = pdfHelper.PdfSharpConvert(htmlContent);
         }
     }
 }

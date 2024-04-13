@@ -65,9 +65,11 @@
             btnSave = new Button();
             btnAddNewRecord = new Button();
             groupBox3 = new GroupBox();
-            dgvStaff = new DataGridView();
-            cmbFilter = new ComboBox();
+            btnExportExcel = new Button();
+            btnExportToPdf = new Button();
             label2 = new Label();
+            cmbFilter = new ComboBox();
+            dgvStaff = new DataGridView();
             groupBox1.SuspendLayout();
             panel3.SuspendLayout();
             panel2.SuspendLayout();
@@ -442,6 +444,8 @@
             // groupBox3
             // 
             groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox3.Controls.Add(btnExportExcel);
+            groupBox3.Controls.Add(btnExportToPdf);
             groupBox3.Controls.Add(label2);
             groupBox3.Controls.Add(cmbFilter);
             groupBox3.Controls.Add(dgvStaff);
@@ -451,6 +455,46 @@
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "List of Staff";
+            // 
+            // btnExportExcel
+            // 
+            btnExportExcel.Location = new Point(904, 22);
+            btnExportExcel.Name = "btnExportExcel";
+            btnExportExcel.Size = new Size(130, 23);
+            btnExportExcel.TabIndex = 41;
+            btnExportExcel.Text = "Export to EXCEL";
+            btnExportExcel.UseVisualStyleBackColor = true;
+            btnExportExcel.Click += btnExportExcel_Click;
+            // 
+            // btnExportToPdf
+            // 
+            btnExportToPdf.Location = new Point(768, 22);
+            btnExportToPdf.Name = "btnExportToPdf";
+            btnExportToPdf.Size = new Size(130, 23);
+            btnExportToPdf.TabIndex = 40;
+            btnExportToPdf.Text = "Export to PDF";
+            btnExportToPdf.UseVisualStyleBackColor = true;
+            btnExportToPdf.Click += btnExportToPdf_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(6, 25);
+            label2.Name = "label2";
+            label2.Size = new Size(90, 15);
+            label2.TabIndex = 38;
+            label2.Text = "Show Records : ";
+            // 
+            // cmbFilter
+            // 
+            cmbFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFilter.FormattingEnabled = true;
+            cmbFilter.Items.AddRange(new object[] { "All", "Active", "Inactive", "Pending" });
+            cmbFilter.Location = new Point(108, 22);
+            cmbFilter.Name = "cmbFilter";
+            cmbFilter.Size = new Size(127, 23);
+            cmbFilter.TabIndex = 37;
+            cmbFilter.SelectedIndexChanged += cmbFilter_SelectedIndexChanged;
             // 
             // dgvStaff
             // 
@@ -464,26 +508,6 @@
             dgvStaff.Size = new Size(1028, 365);
             dgvStaff.TabIndex = 0;
             dgvStaff.CellClick += dgvStaff_CellClick;
-            // 
-            // cmbFilter
-            // 
-            cmbFilter.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbFilter.FormattingEnabled = true;
-            cmbFilter.Items.AddRange(new object[] { "All", "Active", "Inactive", "Pending" });
-            cmbFilter.Location = new Point(108, 22);
-            cmbFilter.Name = "cmbFilter";
-            cmbFilter.Size = new Size(127, 23);
-            cmbFilter.TabIndex = 37;
-            cmbFilter.SelectedIndexChanged += cmbFilter_SelectedIndexChanged;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(6, 25);
-            label2.Name = "label2";
-            label2.Size = new Size(90, 15);
-            label2.TabIndex = 38;
-            label2.Text = "Show Records : ";
             // 
             // StaffView
             // 
@@ -554,5 +578,7 @@
         private DataGridView dgvStaff;
         private ComboBox cmbFilter;
         private Label label2;
+        private Button btnExportExcel;
+        private Button btnExportToPdf;
     }
 }
