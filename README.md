@@ -13,4 +13,7 @@
 https://drive.google.com/file/d/1oTYZAHfrTxCEqsw0noMMz1Y8sXv0cckV/view?usp=drive_link
 </h3>
 
-
+<p>
+  This application is based on MVC architecture and still need further enhancements to do. <br/>
+  The DB First approach is used with linq2db.SqlServer package 
+</p>
