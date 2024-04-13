@@ -113,6 +113,7 @@ namespace RadfordHr_Controller
             {
                 _staff = _staff.Where(x => x.Status.ToString().ToLower().Equals(StaffStatus.Pending.ToString().ToLower())).ToList();
             }
+            _staff = _staff.OrderBy(x=>x.StaffType).ThenBy(x=>x.LastName).ToList();
             _view.UpdateGridWithChangedStaff(_staff);
             //this._view.CanModifyID = false;
         }

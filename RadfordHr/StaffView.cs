@@ -353,7 +353,7 @@ namespace RadfordHr
                 cbManager.DisplayMember = "FullName";
                 cbManager.ValueMember = "Id";
                 cbManager.Visible = false;
-                cmbFilter.SelectedIndex = 0;
+                cmbFilter.SelectedItem = "Active";
             }
             catch (Exception ex)
             {
