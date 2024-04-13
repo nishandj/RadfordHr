@@ -37,147 +37,159 @@ namespace RadfordHr_Controller
 
         private void updateViewDetailValues(Staff staff)
         {
-            //_view.Staff = staff;
-            _view.Id = staff.Id;
-            _view.StaffType = staff.StaffType;
-            _view.Title = staff.Title;
-            _view.FirstName = staff.FirstName;
-            _view.LastName = staff.LastName;
-            _view.MiddleInitial = staff.MiddleInitial;
-            _view.HomePhone = staff.HomePhone;
-            _view.CellPhone = staff.CellPhone;
-            _view.OfficeExtension = staff.OfficeExtension;
-            _view.IRDNumber = staff.IRDNumber;
-            _view.Status = staff.Status;
-            _view.ManagerId = staff.ManagerId;
+            try
+            {
+                _view.Id = staff.Id;
+                _view.StaffType = staff.StaffType;
+                _view.Title = staff.Title;
+                _view.FirstName = staff.FirstName;
+                _view.LastName = staff.LastName;
+                _view.MiddleInitial = staff.MiddleInitial;
+                _view.HomePhone = staff.HomePhone;
+                _view.CellPhone = staff.CellPhone;
+                _view.OfficeExtension = staff.OfficeExtension;
+                _view.IRDNumber = staff.IRDNumber;
+                _view.Status = staff.Status;
+                _view.ManagerId = staff.ManagerId;
+            }
+            catch (Exception)
+            {
+                throw;
+            }            
         }
         private void updateStaffWithViewValues(Staff staff)
         {
-            //staff = _view.Staff;
-            staff.Id = _view.Id;
-            staff.StaffType = _view.StaffType;
-            staff.Title = _view.Title;
-            staff.FirstName = _view.FirstName;
-            staff.LastName = _view.LastName;
-            staff.MiddleInitial = _view.MiddleInitial;
-            staff.HomePhone = _view.HomePhone;
-            staff.CellPhone = _view.CellPhone;
-            staff.OfficeExtension = _view.OfficeExtension;
-            staff.IRDNumber = _view.IRDNumber;
-            staff.Status = _view.Status;
-            staff.ManagerId = _view.ManagerId;
+            try
+            {
+                staff.Id = _view.Id;
+                staff.StaffType = _view.StaffType;
+                staff.Title = _view.Title;
+                staff.FirstName = _view.FirstName;
+                staff.LastName = _view.LastName;
+                staff.MiddleInitial = _view.MiddleInitial;
+                staff.HomePhone = _view.HomePhone;
+                staff.CellPhone = _view.CellPhone;
+                staff.OfficeExtension = _view.OfficeExtension;
+                staff.IRDNumber = _view.IRDNumber;
+                staff.Status = _view.Status;
+                staff.ManagerId = _view.ManagerId;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public void LoadView()
         {
-            _view.ClearGrid();
-            _staffBackup = new();
-            var staff = radfordHrDbService.GetStaff();
-            Staff staffToAdd;
-            foreach (var stf in staff)
+            try
             {
-                staffToAdd= new Staff(stf.Id, (StaffType)Enum.Parse(typeof(StaffType), stf.StaffType), 
-                    (StaffTitle)Enum.Parse(typeof(StaffTitle), stf.Title), stf.FirstName, stf.LastName, 
-                    stf.MiddleInitial, stf.HomePhone, stf.CellPhone, stf.OfficeExtension, stf.IrdNumber, 
-                    (StaffStatus)Enum.Parse(typeof(StaffStatus), stf.Status), stf.ManagerId);
-                this._staff.Add(staffToAdd);
+                _view.ClearGrid();
+                _staffBackup = new();
+                var staff = radfordHrDbService.GetStaff();
+                Staff staffToAdd;
+                foreach (var stf in staff)
+                {
+                    staffToAdd = new Staff(stf.Id, (StaffType)Enum.Parse(typeof(StaffType), stf.StaffType),
+                        (StaffTitle)Enum.Parse(typeof(StaffTitle), stf.Title), stf.FirstName, stf.LastName,
+                        stf.MiddleInitial, stf.HomePhone, stf.CellPhone, stf.OfficeExtension, stf.IrdNumber,
+                        (StaffStatus)Enum.Parse(typeof(StaffStatus), stf.Status), stf.ManagerId);
+                    this._staff.Add(staffToAdd);
+                }
+                foreach (Staff stf in _staff)
+                    _view.AddStaffToGrid(stf);
+                if (_staff != null && _staff.Count > 0)
+                    _view.SetSelectedStaffInGrid(_staff.First());
+                if (_staff != null)
+                    _staffBackup.AddRange(_staff);
             }
-            foreach (Staff stf in _staff)
-                _view.AddStaffToGrid(stf);
-            if (_staff != null && _staff.Count>0)
-                _view.SetSelectedStaffInGrid(_staff.First());
-            if (_staff != null)
-                _staffBackup.AddRange(_staff);
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public void SelectedStaffChanged(int selectedStaffId)
         {
-            Staff? stf = _staff.Where(x => x.Id == selectedStaffId).FirstOrDefault();
-            if (stf == null)
-                return;
-            _selectedStaff = stf;
-            updateViewDetailValues(stf);
-            _view.SetSelectedStaffInGrid(stf);
-            //this._view.CanModifyID = false;
+            try
+            {
+                Staff? stf = _staff.Where(x => x.Id == selectedStaffId).FirstOrDefault();
+                if (stf == null)
+                    return;
+                _selectedStaff = stf;
+                updateViewDetailValues(stf);
+                _view.SetSelectedStaffInGrid(stf);
+            }
+            catch (Exception)
+            {
+                throw;
+            }            
         }
         public void FilterStaffList(string status)
         {
-            _staff = _staffBackup;
-            if (status.ToLower().Equals(StaffStatus.Active.ToString().ToLower()))
+            try
             {
-                _staff = _staff.Where(x => x.Status.ToString().ToLower().Equals(StaffStatus.Active.ToString().ToLower())).ToList();
-            }  
-            else if (status.ToLower().Equals(StaffStatus.Inactive.ToString().ToLower()))
-            {
-                _staff = _staff.Where(x => x.Status.ToString().ToLower().Equals(StaffStatus.Inactive.ToString().ToLower())).ToList();
+                _staff = _staffBackup;
+                if (status.ToLower().Equals(StaffStatus.Active.ToString().ToLower()))
+                {
+                    _staff = _staff.Where(x => x.Status.ToString().ToLower().Equals(StaffStatus.Active.ToString().ToLower())).ToList();
+                }
+                else if (status.ToLower().Equals(StaffStatus.Inactive.ToString().ToLower()))
+                {
+                    _staff = _staff.Where(x => x.Status.ToString().ToLower().Equals(StaffStatus.Inactive.ToString().ToLower())).ToList();
+                }
+                else if (status.ToLower().Equals(StaffStatus.Pending.ToString().ToLower()))
+                {
+                    _staff = _staff.Where(x => x.Status.ToString().ToLower().Equals(StaffStatus.Pending.ToString().ToLower())).ToList();
+                }
+                _staff = _staff.OrderBy(x => x.StaffType).ThenBy(x => x.LastName).ToList();
+                _view.UpdateGridWithChangedStaff(_staff);
             }
-            else if (status.ToLower().Equals(StaffStatus.Pending.ToString().ToLower()))
+            catch (Exception)
             {
-                _staff = _staff.Where(x => x.Status.ToString().ToLower().Equals(StaffStatus.Pending.ToString().ToLower())).ToList();
-            }
-            _staff = _staff.OrderBy(x=>x.StaffType).ThenBy(x=>x.LastName).ToList();
-            _view.UpdateGridWithChangedStaff(_staff);
-            //this._view.CanModifyID = false;
+                throw;
+            }            
         }
         public void AddNewStaff()
         {
-            _selectedStaff = new Staff(null,StaffType.Employee, StaffTitle.Mr, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, StaffStatus.Active, null);
-
-            this.updateViewDetailValues(_selectedStaff);
-            //this._view.CanModifyID = true;
-        }
-
-        public void RemoveUser()
-        {
-            int? id = this._view.GetIdOfSelectedStaffInGrid();
-            Staff? userToRemove = null;
-
-            if (id.HasValue)
+            try
             {
-                foreach (Staff stf in this._staff)
-                {
-                    if (stf.Id == id)
-                    {
-                        userToRemove = stf;
-                        break;
-                    }
-                }
-
-                if (userToRemove != null)
-                {
-                    int newSelectedIndex = this._staff.IndexOf(userToRemove);
-                    this._staff.Remove(userToRemove);
-                    //this._view.RemoveUserFromGrid(userToRemove);
-
-                    if (newSelectedIndex > -1 && newSelectedIndex < _staff.Count)
-                    {
-                        //this._view.SetSelectedUserInGrid((User)_users[newSelectedIndex]);
-                    }
-                }
+                _selectedStaff = new Staff(null, StaffType.Employee, StaffTitle.Mr, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, StaffStatus.Active, null);
+                this.updateViewDetailValues(_selectedStaff);
             }
+            catch (Exception)
+            {
+                throw;
+            }            
         }
+
 
         public void Save()
         {
-            updateStaffWithViewValues(_selectedStaff);
-            int? id = _selectedStaff.Id;           
-            radfordHrDbService.UpsertStaff(ref id, _selectedStaff.StaffType.ToString(), 
-                _selectedStaff.Title.ToString(), _selectedStaff.FirstName, _selectedStaff.LastName, _selectedStaff.MiddleInitial, 
-                _selectedStaff.HomePhone, _selectedStaff.CellPhone, _selectedStaff.OfficeExtension, _selectedStaff.IRDNumber, 
-                _selectedStaff.Status.ToString(), _selectedStaff.ManagerId);
-            _selectedStaff.Id = id;
-            if (!this._staff.Contains(_selectedStaff))
+            try
             {
-                // Add new user                
-                this._staff.Add(_selectedStaff);
-                this._view.AddStaffToGrid(_selectedStaff);
+                updateStaffWithViewValues(_selectedStaff);
+                int? id = _selectedStaff.Id;
+                radfordHrDbService.UpsertStaff(ref id, _selectedStaff.StaffType.ToString(),
+                    _selectedStaff.Title.ToString(), _selectedStaff.FirstName, _selectedStaff.LastName, _selectedStaff.MiddleInitial,
+                    _selectedStaff.HomePhone, _selectedStaff.CellPhone, _selectedStaff.OfficeExtension, _selectedStaff.IRDNumber,
+                    _selectedStaff.Status.ToString(), _selectedStaff.ManagerId);
+                _selectedStaff.Id = id;
+                if (!this._staff.Contains(_selectedStaff))
+                {
+                    // Add new user                
+                    this._staff.Add(_selectedStaff);
+                    this._view.AddStaffToGrid(_selectedStaff);
+                }
+                else
+                {
+                    // Update existing
+                    this._view.UpdateGridWithChangedStaff(_selectedStaff);
+                }
+                _view.SetSelectedStaffInGrid(_selectedStaff);
             }
-            else
+            catch (Exception)
             {
-                // Update existing
-                this._view.UpdateGridWithChangedStaff(_selectedStaff);
-            }
-            _view.SetSelectedStaffInGrid(_selectedStaff);
-            //this._view.CanModifyID = false;
-
+                throw;
+            }            
         }
     }
 }

@@ -13,9 +13,7 @@ namespace RadfordHr_Controller
         void ClearGrid();
         void AddStaffToGrid(Staff staff);
         void UpdateGridWithChangedStaff(Staff staff);
-        void UpdateGridWithChangedStaff(List<Staff> staffList);
-        void RemoveStaffFromGrid(Staff staff);
-        int? GetIdOfSelectedStaffInGrid();
+        void UpdateGridWithChangedStaff(List<Staff> staffList);                
         void SetSelectedStaffInGrid(Staff staff);
 
         //Staff Staff { get; set; }

@@ -27,23 +27,44 @@ namespace Radford_DataService.DataService
         #region Select Records
         public List<GetStaffResult>? GetStaff()
         {
-            using var db = new RadfordHrDbContext();
-            var result = db.GetStaff();
-            return result.ToList(); 
+            try
+            {
+                using var db = new RadfordHrDbContext();
+                var result = db.GetStaff();
+                return result.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public async Task<List<GetStaffResult>> GetStaffAsync()
         {
-            using var db = new RadfordHrDbContext();
-            var result = await db.GetStaffAsync();
-            return result.ToList();
+            try
+            {
+                using var db = new RadfordHrDbContext();
+                var result = await db.GetStaffAsync();
+                return result.ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         #endregion
         #region Update Records
         public int UpsertStaff(ref int? id, string staffType, string title, string firstName, string lastName, string middleInitial, string homePhone, string cellPhone, string officeExtension, string irdNumber, string status, int? managerId)
         {
-            using var db = new RadfordHrDbContext();
-            var result = db.UpsertStaff(ref id, staffType, title, firstName, lastName, middleInitial, homePhone, cellPhone, officeExtension, irdNumber, status, managerId);
-            return result;
+            try
+            {
+                using var db = new RadfordHrDbContext();
+                var result = db.UpsertStaff(ref id, staffType, title, firstName, lastName, middleInitial, homePhone, cellPhone, officeExtension, irdNumber, status, managerId);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         #endregion

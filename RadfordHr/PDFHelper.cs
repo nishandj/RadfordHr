@@ -19,14 +19,16 @@ namespace RadfordHr
         }
         public byte[] PdfSharpConvert(string html)
         {
-            var doc = new HtmlToPdfDocument()
+            try
             {
-                GlobalSettings = {
+                var doc = new HtmlToPdfDocument()
+                {
+                    GlobalSettings = {
                     ColorMode = WkHtmlToPdfDotNet.ColorMode.Color,
                     Orientation = WkHtmlToPdfDotNet.Orientation.Portrait,
                     PaperSize = WkHtmlToPdfDotNet.PaperKind.A4,
                 },
-                Objects = {
+                    Objects = {
                     new ObjectSettings() {
                         PagesCount = true,
                         FooterSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 },
@@ -36,10 +38,15 @@ namespace RadfordHr
                         WebSettings = { DefaultEncoding = "utf-8" }
                     }
                 }
-            };
+                };
 
-            byte[] pdf = this.converter.Convert(doc);
-            return pdf;
+                byte[] pdf = this.converter.Convert(doc);
+                return pdf;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

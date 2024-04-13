@@ -15,8 +15,7 @@ namespace RadfordHr
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             StaffView view = new StaffView();
-            StaffController controller = new StaffController(view, new());
-            
+            StaffController controller = new StaffController(view, new());            
             controller.LoadView();
             Application.Run(view);
         }

@@ -276,30 +276,27 @@ namespace RadfordHr
 
         public void ClearGrid()
         {
-            dgvStaff.Rows.Clear();
-            dgvStaff.Columns.Clear();
-            dgvStaff.Columns.Add("ID", "ID");
-            dgvStaff.Columns.Add("StaffTypeColumn", "Type");
-            dgvStaff.Columns.Add("TitleColumn", "Title");
-            dgvStaff.Columns.Add("FirstNameColumn", "First Name");
-            dgvStaff.Columns.Add("LastNameColumn", "Last Name");
-            dgvStaff.Columns.Add("MiddleInitialColumn", "Middle Initial");
-            dgvStaff.Columns.Add("HomePhoneColumn", "Home Phone");
-            dgvStaff.Columns.Add("CellPhoneColumn", "Cell Phone");
-            dgvStaff.Columns.Add("OfficeExtensionColumn", "Office Extension");
-            dgvStaff.Columns.Add("IRDNumberColumn", "IRD Number");
-            dgvStaff.Columns.Add("StatusColumn", "Status");
-            dgvStaff.Columns.Add("ManagerIdColumn", "Manager Name");
-        }
-
-        public int? GetIdOfSelectedStaffInGrid()
-        {
-            return this.Id;
-        }
-
-        public void RemoveStaffFromGrid(RadfordHr_Model.Staff staff)
-        {
-
+            try
+            {
+                dgvStaff.Rows.Clear();
+                dgvStaff.Columns.Clear();
+                dgvStaff.Columns.Add("ID", "ID");
+                dgvStaff.Columns.Add("StaffTypeColumn", "Type");
+                dgvStaff.Columns.Add("TitleColumn", "Title");
+                dgvStaff.Columns.Add("FirstNameColumn", "First Name");
+                dgvStaff.Columns.Add("LastNameColumn", "Last Name");
+                dgvStaff.Columns.Add("MiddleInitialColumn", "Middle Initial");
+                dgvStaff.Columns.Add("HomePhoneColumn", "Home Phone");
+                dgvStaff.Columns.Add("CellPhoneColumn", "Cell Phone");
+                dgvStaff.Columns.Add("OfficeExtensionColumn", "Office Extension");
+                dgvStaff.Columns.Add("IRDNumberColumn", "IRD Number");
+                dgvStaff.Columns.Add("StatusColumn", "Status");
+                dgvStaff.Columns.Add("ManagerIdColumn", "Manager Name");
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         public void SetController(StaffController controller)
@@ -309,37 +306,37 @@ namespace RadfordHr
 
         public void SetSelectedStaffInGrid(RadfordHr_Model.Staff staff)
         {
-            //foreach (DataGridViewRow row in dgvStaff.Rows)
-            //{
-            //    if (row.Cells[0].Value.ToString().Equals(staff.Id?.ToString()))
-            //    {
-            //        row.Selected = true;
-            //        break;
-            //    }
-            //}
+            //set selected staff in grid - highlight the row - not specified on the spec - to be implemented
         }
 
         public void UpdateGridWithChangedStaff(RadfordHr_Model.Staff staff)
         {
-            foreach (DataGridViewRow row in dgvStaff.Rows)
+            try
             {
-                // 0 is the column index
-                if (row.Cells[0].Value.ToString() == staff.Id.ToString())
+                foreach (DataGridViewRow row in dgvStaff.Rows)
                 {
-                    row.Cells[1].Value = staff.StaffType.ToString();
-                    row.Cells[2].Value = staff.Title.ToString();
-                    row.Cells[3].Value = staff.FirstName;
-                    row.Cells[4].Value = staff.LastName;
-                    row.Cells[5].Value = staff.MiddleInitial;
-                    row.Cells[6].Value = staff.HomePhone;
-                    row.Cells[7].Value = staff.CellPhone;
-                    row.Cells[8].Value = staff.OfficeExtension;
-                    row.Cells[9].Value = staff.IRDNumber;
-                    row.Cells[10].Value = staff.Status.ToString();
-                    row.Cells[11].Value = _controller.ManagerList.Where(x => x.Id == staff.ManagerId).FirstOrDefault()?.FullName;
-                    break;
+                    // 0 is the column index
+                    if (row.Cells[0].Value.ToString() == staff.Id.ToString())
+                    {
+                        row.Cells[1].Value = staff.StaffType.ToString();
+                        row.Cells[2].Value = staff.Title.ToString();
+                        row.Cells[3].Value = staff.FirstName;
+                        row.Cells[4].Value = staff.LastName;
+                        row.Cells[5].Value = staff.MiddleInitial;
+                        row.Cells[6].Value = staff.HomePhone;
+                        row.Cells[7].Value = staff.CellPhone;
+                        row.Cells[8].Value = staff.OfficeExtension;
+                        row.Cells[9].Value = staff.IRDNumber;
+                        row.Cells[10].Value = staff.Status.ToString();
+                        row.Cells[11].Value = _controller.ManagerList.Where(x => x.Id == staff.ManagerId).FirstOrDefault()?.FullName;
+                        break;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         private void StaffView_Load(object sender, EventArgs e)
@@ -357,32 +354,51 @@ namespace RadfordHr
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageHelper.ErrorMessage(ex.Message);
             }
         }
 
         private void btnAddNewRecord_Click(object sender, EventArgs e)
         {
-            _controller.AddNewStaff();
-            btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
-            btnAddNewRecord.Enabled = false;
+            try
+            {
+                _controller.AddNewStaff();
+                btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+                btnAddNewRecord.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-
-            _controller.Save();
-            btnAddNewRecord.Enabled = true;
-            btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+            try
+            {
+                _controller.Save();
+                btnAddNewRecord.Enabled = true;
+                btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            //_controller.AddNewStaff();
-            _controller.SelectedStaff = null;
-            Id = null;
-            btnAddNewRecord.Enabled = true;
-            btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+            try
+            {
+                _controller.SelectedStaff = null;
+                Id = null;
+                btnAddNewRecord.Enabled = true;
+                btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         private void rbManager_CheckedChanged(object sender, EventArgs e)
@@ -399,11 +415,18 @@ namespace RadfordHr
 
         private void dgvStaff_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > -1)
+            try
             {
-                var id = this.dgvStaff[0, e.RowIndex].Value.ToString();
-                _controller.SelectedStaffChanged(int.Parse(id));
-                btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+                if (e.RowIndex > -1)
+                {
+                    var id = this.dgvStaff[0, e.RowIndex].Value.ToString();
+                    _controller.SelectedStaffChanged(int.Parse(id));
+                    btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
             }
         }
 
@@ -421,59 +444,86 @@ namespace RadfordHr
 
         private void cbManager_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_controller.SelectedStaff != null && cbManager.SelectedItem != null)
-                this.ManagerId = ((Staff)cbManager.SelectedItem).Id;
+            try
+            {
+                if (_controller.SelectedStaff != null && cbManager.SelectedItem != null)
+                    this.ManagerId = ((Staff)cbManager.SelectedItem).Id;
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         private void cmbFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _controller.FilterStaffList(cmbFilter.SelectedItem.ToString());
+            try
+            {
+                _controller.FilterStaffList(cmbFilter.SelectedItem.ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         public void UpdateGridWithChangedStaff(List<Staff> staffList)
         {
-            dgvStaff.Rows.Clear();
-            foreach (var staff in staffList)
+            try
             {
-                AddStaffToGrid(staff);
+                dgvStaff.Rows.Clear();
+                foreach (var staff in staffList)
+                {
+                    AddStaffToGrid(staff);
+                }
             }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
 
         private void btnExportExcel_Click(object sender, EventArgs e)
         {
-            string fileName;
-
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "xls files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
-            saveFileDialog1.Title = "To Excel";
-            saveFileDialog1.FileName = "RadfordHr - StaffList";
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            try
             {
-                List<StaffToPrint> staffToPrintList = new();
-                foreach (var item in _controller.StaffList)
+                string fileName;
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "xls files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
+                saveFileDialog1.Title = "To Excel";
+                saveFileDialog1.FileName = "RadfordHr - StaffList";
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    staffToPrintList.Add(new StaffToPrint
+                    List<StaffToPrint> staffToPrintList = new();
+                    foreach (var item in _controller.StaffList)
                     {
-                        Id = item.Id,
-                        StaffType = item.StaffType.ToString(),
-                        Title = item.Title.ToString(),
-                        FirstName = item.FirstName,
-                        LastName = item.LastName,
-                        MiddleInitial = item.MiddleInitial,
-                        HomePhone = item.HomePhone,
-                        CellPhone = item.CellPhone,
-                        OfficeExtension = item.OfficeExtension,
-                        IRDNumber = item.IRDNumber,
-                        Status = item.Status.ToString(),
-                        Manager = _controller.ManagerList.Where(x => x.Id == item.ManagerId).FirstOrDefault()?.FullName
-                    });
+                        staffToPrintList.Add(new StaffToPrint
+                        {
+                            Id = item.Id,
+                            StaffType = item.StaffType.ToString(),
+                            Title = item.Title.ToString(),
+                            FirstName = item.FirstName,
+                            LastName = item.LastName,
+                            MiddleInitial = item.MiddleInitial,
+                            HomePhone = item.HomePhone,
+                            CellPhone = item.CellPhone,
+                            OfficeExtension = item.OfficeExtension,
+                            IRDNumber = item.IRDNumber,
+                            Status = item.Status.ToString(),
+                            Manager = _controller.ManagerList.Where(x => x.Id == item.ManagerId).FirstOrDefault()?.FullName
+                        });
+                    }
+                    staffToPrintList = staffToPrintList.OrderBy(x => x.StaffType).ThenBy(x => x.FirstName).ToList();
+                    fileName = saveFileDialog1.FileName;
+                    XLWorkbook xLWorkbook = ExcelHelper.GenerateExcel<StaffToPrint>(staffToPrintList, "RadfordHr - StaffList");
+                    xLWorkbook.SaveAs(fileName);
                 }
-                staffToPrintList = staffToPrintList.OrderBy(x => x.StaffType).ThenBy(x => x.FirstName).ToList();
-                fileName = saveFileDialog1.FileName;
-                XLWorkbook xLWorkbook = ExcelService.GenerateExcel<StaffToPrint>(staffToPrintList, "RadfordHr - StaffList");
-                xLWorkbook.SaveAs(fileName);
             }
+            catch (Exception ex)
+            {
+                MessageHelper.ErrorMessage(ex.Message);
+            }            
         }
         private class StaffToPrint
         {
@@ -568,7 +618,7 @@ namespace RadfordHr
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageHelper.ErrorMessage(ex.Message);
             }
         }
     }

@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace RadfordHr
 {
-    public class ExcelService
+    public class ExcelHelper
     {
-        public static XLWorkbook GenerateExcel<T>(List<T> data, string sheetName = "Sheet1", int[] width = null)
+        public static XLWorkbook GenerateExcel<T>(List<T> data, string sheetName = "Sheet1", int[]? width = null)
         {
-            var workbook = new XLWorkbook();
+            try
+            {
+                var workbook = new XLWorkbook();
                 var worksheet = workbook.Worksheets.Add(sheetName);
 
                 // Assuming T is a class with properties
@@ -66,33 +68,38 @@ namespace RadfordHr
                     //worksheet.Column(i + 1).Width = columnWidth;
                     worksheet.Column(i + 1).AdjustToContents();
                 }
-
-                //using (var stream = new MemoryStream())
-                //{
-                //    workbook.SaveAs(stream);
-                //    return stream.ToArray();
-                //}
                 return workbook;
-            
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public static string ConvertCamelCaseToSpaces(string input)
         {
-            if (string.IsNullOrEmpty(input))
-                return input;
-
-            var result = new StringBuilder(input[0].ToString());
-
-            for (int i = 1; i < input.Length; i++)
+            try
             {
-                if (char.IsUpper(input[i]))
+                if (string.IsNullOrEmpty(input))
+                    return input;
+
+                var result = new StringBuilder(input[0].ToString());
+
+                for (int i = 1; i < input.Length; i++)
                 {
-                    result.Append(' ');
+                    if (char.IsUpper(input[i]))
+                    {
+                        result.Append(' ');
+                    }
+
+                    result.Append(input[i]);
                 }
 
-                result.Append(input[i]);
+                return result.ToString();
             }
-
-            return result.ToString();
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
