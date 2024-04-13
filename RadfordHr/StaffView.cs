@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using Microsoft.VisualBasic.ApplicationServices;
 using RadfordHr_Controller;
 using RadfordHr_Model;
@@ -19,6 +20,54 @@ namespace RadfordHr
     public partial class StaffView : Form, IStaffView
     {
         private PDFHelper pdfHelper;
+        string css = @"
+                table {
+    width: 100%;
+    border-collapse: collapse; /* This ensures borders are collapsed */
+  }
+  td {
+    vertical-align: top;
+    border: 1px solid black; /* Add border to table cells */
+    padding: 5px; /* Add padding for better appearance */
+  }
+    .square {        
+        margin-left: 20px;
+        display: inline-block;
+    }
+.table_component {
+    overflow: auto;
+    width: 100%;
+}
+
+.table_component table {
+    border: 1px solid #dededf;
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    text-align: left;
+}
+
+.table_component caption {
+    caption-side: top;
+    text-align: left;
+}
+
+.table_component th {
+    border: 1px solid #dededf;
+    background-color: #eceff1;
+    color: #000000;
+    padding: 5px;
+}
+
+.table_component td {
+    border: 1px solid #dededf;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 5px;
+}
+                ";
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public StaffView()
@@ -444,10 +493,83 @@ namespace RadfordHr
 
         private void btnExportToPdf_Click(object sender, EventArgs e)
         {
-            string htmlContent = "<html><body><h1>Hello, PDF!</h1></body></html>";
+            try
+            {
+                string fileName;
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();                
+                saveFileDialog1.Title = "Pdf";
+                saveFileDialog1.FileName = "RadfordHr - StaffList.pdf";
 
-            // Convert HTML to PDF
-            byte[] pdf = pdfHelper.PdfSharpConvert(htmlContent);
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    List<StaffToPrint> staffToPrintList = new();
+                    foreach (var item in _controller.StaffList)
+                    {
+                        staffToPrintList.Add(new StaffToPrint
+                        {
+                            Id = item.Id,
+                            StaffType = item.StaffType.ToString(),
+                            Title = item.Title.ToString(),
+                            FirstName = item.FirstName,
+                            LastName = item.LastName,
+                            MiddleInitial = item.MiddleInitial,
+                            HomePhone = item.HomePhone,
+                            CellPhone = item.CellPhone,
+                            OfficeExtension = item.OfficeExtension,
+                            IRDNumber = item.IRDNumber,
+                            Status = item.Status.ToString(),
+                            Manager = _controller.ManagerList.Where(x => x.Id == item.ManagerId).FirstOrDefault()?.FullName
+                        });
+                    }
+                    staffToPrintList = staffToPrintList.OrderBy(x => x.StaffType).ThenBy(x => x.FirstName).ToList();
+                    StringBuilder documentBuilder = new StringBuilder();
+                    documentBuilder.Append("<html>");
+                    documentBuilder.Append("<head><style>" + css + "</style></head>");
+                    documentBuilder.Append("<body>");
+                    documentBuilder.Append("<div style='text-align:center;'><h1>RadfordHr - StaffList</h1></div>");
+                    documentBuilder.Append("<table class='table_component'>");
+                    documentBuilder.Append("<thead><tr>");
+                    documentBuilder.Append("<th>ID</th>");
+                    documentBuilder.Append("<th>Staff Type</th>");
+                    documentBuilder.Append("<th>Title</th>");
+                    documentBuilder.Append("<th>First Name</th>");
+                    documentBuilder.Append("<th>Last Name</th>");
+                    documentBuilder.Append("<th>Middle Initial</th>");
+                    documentBuilder.Append("<th>Home Phone</th>");
+                    documentBuilder.Append("<th>Cell Phone</th>");
+                    documentBuilder.Append("<th>Office Extension</th>");
+                    documentBuilder.Append("<th>IRD Number</th>");
+                    documentBuilder.Append("<th>Status</th>");
+                    documentBuilder.Append("<th>Manager</th>");
+                    documentBuilder.Append("</tr></thead><tbody>");
+                    foreach (var stf in staffToPrintList)
+                    {
+                        documentBuilder.Append("<tr>");
+                        documentBuilder.Append("<td>" + stf.Id + "</td>");
+                        documentBuilder.Append("<td>" + stf.StaffType + "</td>");
+                        documentBuilder.Append("<td>" + stf.Title + "</td>");
+                        documentBuilder.Append("<td>" + stf.FirstName + "</td>");
+                        documentBuilder.Append("<td>" + stf.LastName + "</td>");
+                        documentBuilder.Append("<td>" + stf.MiddleInitial + "</td>");
+                        documentBuilder.Append("<td>" + stf.HomePhone + "</td>");
+                        documentBuilder.Append("<td>" + stf.CellPhone + "</td>");
+                        documentBuilder.Append("<td>" + stf.OfficeExtension + "</td>");
+                        documentBuilder.Append("<td>" + stf.IRDNumber + "</td>");
+                        documentBuilder.Append("<td>" + stf.Status + "</td>");
+                        documentBuilder.Append("<td>" + stf.Manager + "</td>");
+                        documentBuilder.Append("</tr>");
+                    }
+                    documentBuilder.Append("</tbody></table>");//<div style='page-break-before:always'>&nbsp;</div>
+                    documentBuilder.Append("</body></html>");
+                    byte[] pdf = pdfHelper.PdfSharpConvert(documentBuilder.ToString());
+                    fileName = saveFileDialog1.FileName;
+                    File.WriteAllBytes(fileName, pdf);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
