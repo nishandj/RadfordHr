@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static RadfordHr.Data.Models.ExtensionMethods;
 
 namespace RadfordHr_Controller
 {
@@ -14,10 +15,12 @@ namespace RadfordHr_Controller
         IStaffView _view;
         List<Staff> _staff;
         List<Staff> _staffBackup;
-        Staff _selectedStaff;
+        Staff? _selectedStaff;
         RadfordHrDbService radfordHrDbService;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public StaffController(IStaffView view, List<Staff> staff)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             _view = view;
             _staff = staff;
@@ -85,7 +88,9 @@ namespace RadfordHr_Controller
             {
                 _view.ClearGrid();
                 _staffBackup = new();
-                var staff = radfordHrDbService.GetStaff();
+                List<GetStaffResult>? staff = radfordHrDbService.GetStaff();
+                if (staff == null)
+                    return;
                 Staff staffToAdd;
                 foreach (var stf in staff)
                 {
@@ -123,10 +128,12 @@ namespace RadfordHr_Controller
                 throw;
             }            
         }
-        public void FilterStaffList(string status)
+        public void FilterStaffList(string? status)
         {
             try
             {
+                if (string.IsNullOrEmpty(status))
+                    return;
                 _staff = _staffBackup;
                 if (status.ToLower().Equals(StaffStatus.Active.ToString().ToLower()))
                 {
@@ -166,6 +173,8 @@ namespace RadfordHr_Controller
         {
             try
             {
+                if (_selectedStaff == null)
+                    throw new Exception("Staff record is null");
                 updateStaffWithViewValues(_selectedStaff);
                 int? id = _selectedStaff.Id;
                 radfordHrDbService.UpsertStaff(ref id, _selectedStaff.StaffType.ToString(),
@@ -178,11 +187,17 @@ namespace RadfordHr_Controller
                     // Add new user                
                     this._staff.Add(_selectedStaff);
                     this._view.AddStaffToGrid(_selectedStaff);
+                    _staffBackup = new();
+                    if (_staff != null)
+                        _staffBackup.AddRange(_staff);
                 }
                 else
                 {
                     // Update existing
                     this._view.UpdateGridWithChangedStaff(_selectedStaff);
+                    _staffBackup = new();
+                    if (_staff != null)
+                        _staffBackup.AddRange(_staff);
                 }
                 _view.SetSelectedStaffInGrid(_selectedStaff);
             }

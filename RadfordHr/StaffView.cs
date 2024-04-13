@@ -76,10 +76,8 @@ namespace RadfordHr
             InitializeComponent();
             pdfHelper = new PDFHelper(new SynchronizedConverter(new PdfTools()));
         }
-
         StaffController _controller;
         int? selectedId = null;
-
         public int? Id
         {
             get
@@ -88,7 +86,6 @@ namespace RadfordHr
             }
             set { selectedId = value; }
         }
-
         public StaffType StaffType
         {
             get
@@ -273,7 +270,6 @@ namespace RadfordHr
                 staff.LastName, staff.MiddleInitial, staff.HomePhone, staff.CellPhone,
                 staff.OfficeExtension, staff.IRDNumber, staff.Status.ToString(), managerName);
         }
-
         public void ClearGrid()
         {
             try
@@ -298,17 +294,14 @@ namespace RadfordHr
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         public void SetController(StaffController controller)
         {
             _controller = controller;
         }
-
         public void SetSelectedStaffInGrid(RadfordHr_Model.Staff staff)
         {
             //set selected staff in grid - highlight the row - not specified on the spec - to be implemented
         }
-
         public void UpdateGridWithChangedStaff(RadfordHr_Model.Staff staff)
         {
             try
@@ -338,7 +331,6 @@ namespace RadfordHr
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         private void StaffView_Load(object sender, EventArgs e)
         {
             try
@@ -351,13 +343,13 @@ namespace RadfordHr
                 cbManager.ValueMember = "Id";
                 cbManager.Visible = false;
                 cmbFilter.SelectedItem = "Active";
+                rbMr.Checked = rbActive.Checked = true;
             }
             catch (Exception ex)
             {
                 MessageHelper.ErrorMessage(ex.Message);
             }
         }
-
         private void btnAddNewRecord_Click(object sender, EventArgs e)
         {
             try
@@ -365,13 +357,13 @@ namespace RadfordHr
                 _controller.AddNewStaff();
                 btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
                 btnAddNewRecord.Enabled = false;
+                cmbFilter.SelectedItem = "All";
             }
             catch (Exception ex)
             {
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -379,13 +371,13 @@ namespace RadfordHr
                 _controller.Save();
                 btnAddNewRecord.Enabled = true;
                 btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
+                MessageHelper.SuccessMessage("Staff saved successfully");
             }
             catch (Exception ex)
             {
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try
@@ -400,7 +392,6 @@ namespace RadfordHr
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         private void rbManager_CheckedChanged(object sender, EventArgs e)
         {
             if (rbManager.Checked)
@@ -412,14 +403,15 @@ namespace RadfordHr
                 cbManager.Visible = true;
             }
         }
-
         private void dgvStaff_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 if (e.RowIndex > -1)
                 {
-                    var id = this.dgvStaff[0, e.RowIndex].Value.ToString();
+                    string? id = this.dgvStaff[0, e.RowIndex].Value.ToString();
+                    if (id == null)
+                        throw new Exception("Id is null");
                     _controller.SelectedStaffChanged(int.Parse(id));
                     btnCancel.Enabled = btnSave.Enabled = _controller.SelectedStaff != null;
                 }
@@ -429,7 +421,6 @@ namespace RadfordHr
                 MessageHelper.ErrorMessage(ex.Message);
             }
         }
-
         private void rbEmployee_CheckedChanged(object sender, EventArgs e)
         {
             if (rbManager.Checked)
@@ -441,7 +432,6 @@ namespace RadfordHr
                 cbManager.Visible = true;
             }
         }
-
         private void cbManager_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -454,11 +444,12 @@ namespace RadfordHr
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         private void cmbFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
+                if(cmbFilter.SelectedItem==null)
+                    throw new Exception("Filter is null");
                 _controller.FilterStaffList(cmbFilter.SelectedItem.ToString());
             }
             catch (Exception ex)
@@ -466,7 +457,6 @@ namespace RadfordHr
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         public void UpdateGridWithChangedStaff(List<Staff> staffList)
         {
             try
@@ -482,7 +472,6 @@ namespace RadfordHr
                 MessageHelper.ErrorMessage(ex.Message);
             }            
         }
-
         private void btnExportExcel_Click(object sender, EventArgs e)
         {
             try
@@ -524,23 +513,7 @@ namespace RadfordHr
             {
                 MessageHelper.ErrorMessage(ex.Message);
             }            
-        }
-        private class StaffToPrint
-        {
-            public int? Id { get; set; }
-            public string? StaffType { get; set; }
-            public string? Title { get; set; }
-            public string? FirstName { get; set; }
-            public string? LastName { get; set; }
-            public string? MiddleInitial { get; set; }
-            public string? HomePhone { get; set; }
-            public string? CellPhone { get; set; }
-            public string? OfficeExtension { get; set; }
-            public string? IRDNumber { get; set; }
-            public string? Status { get; set; }
-            public string? Manager { get; set; }
-        }
-
+        }        
         private void btnExportToPdf_Click(object sender, EventArgs e)
         {
             try
@@ -620,6 +593,21 @@ namespace RadfordHr
             {
                 MessageHelper.ErrorMessage(ex.Message);
             }
+        }
+        private class StaffToPrint
+        {
+            public int? Id { get; set; }
+            public string? StaffType { get; set; }
+            public string? Title { get; set; }
+            public string? FirstName { get; set; }
+            public string? LastName { get; set; }
+            public string? MiddleInitial { get; set; }
+            public string? HomePhone { get; set; }
+            public string? CellPhone { get; set; }
+            public string? OfficeExtension { get; set; }
+            public string? IRDNumber { get; set; }
+            public string? Status { get; set; }
+            public string? Manager { get; set; }
         }
     }
 }

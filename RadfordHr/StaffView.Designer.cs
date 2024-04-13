@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StaffView));
             groupBox1 = new GroupBox();
             cbManager = new ComboBox();
             panel3 = new Panel();
@@ -502,10 +503,10 @@
             dgvStaff.AllowUserToDeleteRows = false;
             dgvStaff.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvStaff.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvStaff.Location = new Point(6, 84);
+            dgvStaff.Location = new Point(6, 51);
             dgvStaff.Name = "dgvStaff";
             dgvStaff.ReadOnly = true;
-            dgvStaff.Size = new Size(1028, 365);
+            dgvStaff.Size = new Size(1028, 398);
             dgvStaff.TabIndex = 0;
             dgvStaff.CellClick += dgvStaff_CellClick;
             // 
@@ -517,6 +518,9 @@
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.Fixed3D;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "StaffView";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Staff";
