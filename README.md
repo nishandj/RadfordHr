@@ -6,6 +6,9 @@
   <li>
     Clean and rebuild the project to restore all nuget packages    
   </li>
+  <li>
+    To enable printing, Export to PDF is added so that the document can be exported as a PDF and then user can view it on Acrobat Reader and print it. Download PDF Reader <a href="https://get.adobe.com/reader/" target="_blank"> Here </a>
+  </li>
 </ul>
 <br/>
 
